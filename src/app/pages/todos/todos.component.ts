@@ -13,24 +13,24 @@ export class TodosComponent implements OnInit {
   prevFilter = {
     title: '',
   }
-  
+
   constructor(private todoService: TodoService) {
     this.setFilter = debounce(this.setFilter, 1000)
   }
 
   ngOnInit(): void {
-    this.todoService.getTodos().subscribe(todos => {
+    this.todoService.query({}).subscribe(todos => {
       this.todos = todos
     })
   }
 
   deleteTodo(todo: Todo) {
     this.todos = this.todos.filter(t => t.id !== todo.id)
-    this.todoService.deleteTodo(todo).subscribe()
+    this.todoService.delete(todo).subscribe()
   }
 
   addTodo(todo: Todo) {
-    this.todoService.addTodo(todo).subscribe(todo => {
+    this.todoService.add(todo).subscribe(todo => {
       this.todos.push(todo)
     })
   }
@@ -38,7 +38,7 @@ export class TodosComponent implements OnInit {
   setFilter(filterBy) {
     if (isEqual(filterBy, this.prevFilter)) return
     this.prevFilter = { ...filterBy }
-    this.todoService.getTodos(filterBy).subscribe(todos => this.todos = todos)
+    this.todoService.query(filterBy).subscribe(todos => this.todos = todos)
   }
 
 }

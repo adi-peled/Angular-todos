@@ -18,11 +18,11 @@ export class TodoService {
   constructor(private http: HttpClient) { }
 
   //get todos
-  getTodos(filterBy = { title: '' }): Observable<Todo[]> {
+  query(filterBy): Observable<Todo[]> {
     console.log('get totos');
-
-    if (!filterBy.title) return this.http.get<Todo[]>(`${this.todosUrl}${this.todosLimit}`);
-    return this.http.get<Todo[]>(`${this.todosUrl}${this.todosLimit}&title=${filterBy.title}`);
+    let filter = ``
+    if (filterBy.title) filter = `title=${filterBy.title}`
+    return this.http.get<Todo[]>(`${this.todosUrl}${this.todosLimit}&${filter}`);
   }
   //toggle todos
   toggleCompleted(todo: Todo): Observable<any> {
@@ -30,12 +30,12 @@ export class TodoService {
     return this.http.put(url, todo, httpOptions)
   }
   //delete todo
-  deleteTodo(todo: Todo): Observable<Todo> {
+  delete(todo: Todo): Observable<Todo> {
     const url = `${this.todosUrl}/${todo.id}`
     return this.http.delete<Todo>(url, httpOptions)
   }
   //add todo
-  addTodo(todo: Todo): Observable<Todo> {
+  add(todo: Todo): Observable<Todo> {
     return this.http.post<Todo>(this.todosUrl, todo, httpOptions)
   }
 }
