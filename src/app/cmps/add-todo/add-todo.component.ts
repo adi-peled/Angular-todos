@@ -15,8 +15,6 @@ export class AddTodoComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('gf');
-
     const todo = {
       title: this.title,
       completed: false

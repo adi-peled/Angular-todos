@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Todo } from '../../models/Todo';
-import * as _ from 'underscore';
+import { debounce, isEqual } from 'lodash';
 import { TodoService } from '../../services/todo.service';
 @Component({
   selector: 'app-todos',
@@ -11,10 +11,11 @@ export class TodosComponent implements OnInit {
 
   todos: Todo[];
   prevFilter = {
-    title: ''
+    title: '',
   }
+  
   constructor(private todoService: TodoService) {
-    this.setFilter = _.debounce(this.setFilter, 1000)
+    this.setFilter = debounce(this.setFilter, 1000)
   }
 
   ngOnInit(): void {
@@ -28,7 +29,6 @@ export class TodosComponent implements OnInit {
     this.todoService.deleteTodo(todo).subscribe()
   }
 
-
   addTodo(todo: Todo) {
     this.todoService.addTodo(todo).subscribe(todo => {
       this.todos.push(todo)
@@ -36,13 +36,9 @@ export class TodosComponent implements OnInit {
   }
 
   setFilter(filterBy) {
-
-    console.log(filterBy.title, this.prevFilter.title);
-    if (filterBy.title === this.prevFilter.title) return
-
+    if (isEqual(filterBy, this.prevFilter)) return
     this.prevFilter = { ...filterBy }
     this.todoService.getTodos(filterBy).subscribe(todos => this.todos = todos)
-
   }
 
 }

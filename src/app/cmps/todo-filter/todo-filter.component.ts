@@ -1,5 +1,4 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { debounce } from 'debounce';
 @Component({
   selector: 'app-todo-filter',
   templateUrl: './todo-filter.component.html',
@@ -10,7 +9,7 @@ export class TodoFilterComponent implements OnInit {
   constructor() { }
 
   filterBy = {
-    title: ''
+    title: '',
   }
 
   ngOnInit(): void {
